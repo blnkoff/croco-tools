@@ -55,6 +55,17 @@ class SnakedDict(UserDict):
         self._user_cased_dict[user_key] = value
         super().__setitem__(snake_key, value)
 
+    @classmethod
+    def recursive_snake(cls, __dict: Optional[dict] = None):
+        user_dict = __dict if __dict else None
+        for key, value in user_dict.items():
+            if isinstance(value, dict):
+                user_dict[key] = cls(value)
+            elif isinstance(value, list):
+                user_dict[key] = [cls(item) if isinstance(item, dict) else item for item in value]
+
+        return cls(user_dict)
+
     def user_case(self) -> dict:
         return self._user_cased_dict
 
