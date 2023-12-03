@@ -1,6 +1,6 @@
 from collections import UserDict
 from dataclasses import dataclass
-from typing import TypedDict, Optional
+from typing import TypedDict, Optional, Self
 from croco_tools.tools import *
 
 
@@ -23,7 +23,7 @@ class Proxy(TypedDict):
 
 
 class _SnakedDict(UserDict):
-    def __init__(self, __dict: Optional[dict] = None):
+    def __init__(self, __dict: Optional[dict | Self] = None):
         user_cased_dict = __dict if __dict else {}
 
         snaked_dict = dict()
@@ -55,6 +55,17 @@ class _SnakedDict(UserDict):
         self._user_cased_dict[user_key] = value
         super().__setitem__(snake_key, value)
 
+    @classmethod
+    def recursive_snake(cls, __dict: Optional[dict] = None):
+        user_dict = __dict if __dict else None
+        for key, value in user_dict.items():
+            if isinstance(value, dict):
+                user_dict[key] = cls(value)
+            elif isinstance(value, list):
+                user_dict[key] = [cls(item) if isinstance(item, dict) else item for item in value]
+
+        return cls(user_dict)
+
     def user_case(self) -> dict:
         return self._user_cased_dict
 
@@ -75,13 +86,7 @@ class _SnakedDict(UserDict):
         return kebab_cased_dict
 
 
-class SnakedDict(_SnakedDict):
+class SnakedDict(UserDict):
     def __init__(self, __dict: Optional[dict] = None):
-        user_dict = __dict if __dict else None
-        for key, value in user_dict.items():
-            if isinstance(value, dict):
-                user_dict[key] = super().__init__(value)
-            elif isinstance(value, list):
-                user_dict[key] = [super().__init__(item) if isinstance(item, dict) else item for item in value]
-
-        super().__init__(user_dict)
+        snaked_dict = _SnakedDict.recursive_snake(__dict)
+        super().__init__(snaked_dict)
