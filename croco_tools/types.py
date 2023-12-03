@@ -22,7 +22,7 @@ class Proxy(TypedDict):
     password: str
 
 
-class SnakedDict(UserDict):
+class _SnakedDict(UserDict):
     def __init__(self, __dict: Optional[dict] = None):
         user_cased_dict = __dict if __dict else {}
 
@@ -55,17 +55,6 @@ class SnakedDict(UserDict):
         self._user_cased_dict[user_key] = value
         super().__setitem__(snake_key, value)
 
-    @classmethod
-    def recursive_snake(cls, __dict: Optional[dict] = None):
-        user_dict = __dict if __dict else None
-        for key, value in user_dict.items():
-            if isinstance(value, dict):
-                user_dict[key] = cls(value)
-            elif isinstance(value, list):
-                user_dict[key] = [cls(item) if isinstance(item, dict) else item for item in value]
-
-        return cls(user_dict)
-
     def user_case(self) -> dict:
         return self._user_cased_dict
 
@@ -84,3 +73,15 @@ class SnakedDict(UserDict):
     def kebab_case(self) -> dict:
         kebab_cased_dict = {kebab_case(key): value for key, value in self.data.items()}
         return kebab_cased_dict
+
+
+class SnakedDict(_SnakedDict):
+    def __init__(self, __dict: Optional[dict] = None):
+        user_dict = __dict if __dict else None
+        for key, value in user_dict.items():
+            if isinstance(value, dict):
+                user_dict[key] = super().__init__(value)
+            elif isinstance(value, list):
+                user_dict[key] = [super().__init__(item) if isinstance(item, dict) else item for item in value]
+
+        super().__init__(user_dict)
