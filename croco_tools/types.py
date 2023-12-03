@@ -1,7 +1,7 @@
 from collections import UserDict
 from dataclasses import dataclass
 from typing import TypedDict, Optional
-from croco_tools.tools import snake_case
+from croco_tools.tools import *
 
 
 @dataclass
@@ -22,24 +22,54 @@ class Proxy(TypedDict):
     password: str
 
 
-class SnakeDict(UserDict):
+class SnakedDict(UserDict):
     def __init__(self, __dict: Optional[dict] = None):
-        snake_cased_dict = {snake_case(key): value for key, value in __dict.items()}
-        self._user_cased_dict = user_cased_dict = __dict if __dict else {}
+        user_cased_dict = __dict if __dict else {}
 
-        key_map = {}
-        for snake_key, pascal_key in zip(snake_cased_dict, user_cased_dict):
-            key_map[snake_key] = pascal_key
+        snaked_dict = dict()
+        key_map = dict()
+        key_occuring = set()
+        keys_to_remove = set()
+
+        for user_key, value in user_cased_dict.items():
+            if (snaked_key := snake_case(user_key)) in key_occuring:
+                keys_to_remove.add(user_key)
+            else:
+                key_occuring.add(snaked_key)
+                key_map[snaked_key] = user_key
+                snaked_dict[snaked_key] = value
+
+        for key in keys_to_remove:
+            user_cased_dict.pop(key)
+
+        self._user_cased_dict = user_cased_dict
 
         self._key_map = key_map
-        super().__init__(snake_cased_dict)
+        super().__init__(snaked_dict)
 
     def __setitem__(self, key, value):
         snake_key = snake_case(key)
-        pascal_key = self._key_map[snake_key]
 
-        self._user_cased_dict[pascal_key] = value
+        user_key = self._key_map[snake_key]
+
+        self._user_cased_dict[user_key] = value
         super().__setitem__(snake_key, value)
 
     def user_case(self) -> dict:
         return self._user_cased_dict
+
+    def pascal_case(self) -> dict:
+        pascal_cased_dict = {pascal_case(key): value for key, value in self.data.items()}
+        return pascal_cased_dict
+
+    def camel_case(self) -> dict:
+        camel_cased_dict = {camel_case(key): value for key, value in self.data.items()}
+        return camel_cased_dict
+
+    def constant_case(self) -> dict:
+        constant_cased_dict = {constant_case(key): value for key, value in self.data.items()}
+        return constant_cased_dict
+
+    def kebab_case(self) -> dict:
+        kebab_cased_dict = {kebab_case(key): value for key, value in self.data.items()}
+        return kebab_cased_dict
