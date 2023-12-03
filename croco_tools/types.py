@@ -86,7 +86,7 @@ class _SnakedDict(UserDict):
         return kebab_cased_dict
 
 
-class SnakedDict(UserDict):
+class SnakedDict(_SnakedDict):
     def __init__(self, __dict: Optional[dict] = None):
         snaked_dict = _SnakedDict.recursive_snake(__dict)
         super().__init__(snaked_dict)
