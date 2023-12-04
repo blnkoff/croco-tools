@@ -43,23 +43,32 @@ def camel_case(s: str) -> str:
     """
     Convert a string to camelCase.
     """
-    s = re.sub(r"(_|-)+", " ", s).title().replace(" ", "")
-    s = s[0].lower() + s[1:]
-    return s
+    s = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', s)
+    s = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s)
+    s = re.sub(r'\W+', '_', s)
+    words = s.split('_')
+    capitalized_words = [word.capitalize() for word in words]
+    return capitalized_words[0].lower() + ''.join(capitalized_words[1:])
 
 
 def pascal_case(s: str) -> str:
     """
     Convert a string to PascalCase.
     """
-    s = re.sub(r"(_|-)+", " ", s).title().replace(" ", "")
-    return s
+    s = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', s)
+    s = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s)
+    s = re.sub(r'\W+', '_', s)
+    words = s.split('_')
+    capitalized_words = [word.capitalize() for word in words]
+    return ''.join(capitalized_words)
 
 
 def constant_case(s: str) -> str:
     """
     Convert a string to CONSTANT_CASE.
     """
+    s = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', s)
+    s = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s)
     s = re.sub(r'\W+', '_', s)
     return s.upper()
 
