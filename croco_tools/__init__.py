@@ -10,5 +10,5 @@ Author's github - https://github.com/blnkoff
 
 from .databases import SqliteDatabase
 from .logger import Logger, log_time
-from .types import Table, LoggingConfig, SnakedDict
+from .types import Table, LoggingConfig, SnakedDict, CameledDict
 from .tools import *
