@@ -1,26 +1,48 @@
-[build-system]
-requires = ["setuptools>=61.0", "selenium>=4.12.0"]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "croco-tools"
-version = "1.0.0"
-authors = [
-    { name = "Alexey", email = "abelenkov2006@gmail.com" },
-]
-description = "The package containing common tools for web3-based projects."
-readme = "README.md"
-requires-python = ">=3.11"
+[tool.poetry]
+name = 'croco_tools'
+version = '0.1.0'
+description = 'The package containing common tools for web3-based projects.'
+authors = ['Alexey <abelenkov2006@gmail.com>']
+license = 'MIT'
+readme = 'README.md'
+repository = 'https://github.com/blnkoff/'
+homepage = 'https://github.com/blnkoff/'
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Build Tools',
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3 :: Only',
-    'License :: OSI Approved :: Apache Software License',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: MacOS'
+]
+packages = [{ include = 'croco_tools' }]
+
+[tool.poetry.dependencies]
+python = '~3.11'
+
+[build-system]
+requires = ['poetry-core']
+build-backend = 'poetry.core.masonry.api'
+
+[project]
+name = 'croco_tools'
+version = '0.1.0'
+authors = ['Alexey <abelenkov2006@gmail.com>']
+description = 'The package containing common tools for web3-based projects.'
+readme = 'README.md'
+requires-python = '~3.11'
+classifiers = [
+    'Development Status :: 1 - Planning',
+    'Intended Audience :: Developers',
+    'Topic :: Software Development :: Build Tools',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3 :: Only',
+    'License :: OSI Approved :: MIT License',
     'Operating System :: Microsoft :: Windows',
     'Operating System :: MacOS'
 ]
 
 [project.urls]
-source = "https://github.com/blnkoff/croco-tools"
+source = 'https://github.com/blnkoff/'
