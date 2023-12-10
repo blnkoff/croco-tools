@@ -17,7 +17,6 @@ classifiers = [
     'Operating System :: Microsoft :: Windows',
     'Operating System :: MacOS'
 ]
-packages = [{ include = 'croco_tools' }]
 
 [tool.poetry.dependencies]
 python = '~3.11'
